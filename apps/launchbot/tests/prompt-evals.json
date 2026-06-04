@@ -1,0 +1,458 @@
+{
+  "schema_version": 1,
+  "app": "launchbot",
+  "bot": "Launchbot",
+  "runtime_model": {
+    "provider": "anthropic",
+    "model": "claude-sonnet-4-6",
+    "effort_policy": {
+      "static": "low",
+      "tool-trace": "medium",
+      "answer-contract": "low",
+      "live-smoke": "medium"
+    },
+    "effort_config_status": "documented_policy_only_no_verified_hermes_anthropic_effort_knob"
+  },
+  "codex_operator_checks": {
+    "must_read": [
+      "AGENTS.md",
+      "apps/launchbot/README.md",
+      "apps/launchbot/profile/SOUL.md",
+      "apps/launchbot/runtime/slack.md"
+    ],
+    "must_run": [
+      "node scripts/run-prompt-evals.mjs --app launchbot --mode all",
+      "npm run launchbot:verify"
+    ]
+  },
+  "evals": [
+    {
+      "id": "launchbot-static-capability-lane-only",
+      "bot": "Launchbot",
+      "surface": "slack:#launch-bot-testing",
+      "lane": "static",
+      "input": "@Launch Bot what can u do, partner?",
+      "setup": {
+        "first_slack_mention": true,
+        "live_tools": "disabled"
+      },
+      "expected_tool_trace": {
+        "must_call": []
+      },
+      "expected_answer_contract": {
+        "must_include": [
+          "Answer: I am Launchbot.",
+          "Source: Launchbot packet",
+          "Scope:",
+          "Confidence: verified",
+          "Caveat:"
+        ],
+        "must_not_include": [
+          "web search",
+          "ML experiments",
+          "creative writing",
+          "smart-home control",
+          "social posting",
+          "broad coding-agent orchestration",
+          "Source: Launch Superpower Bot packet"
+        ]
+      },
+      "forbidden_behavior": [
+        "generic assistant capabilities",
+        "Launch Superpower Bot identity",
+        "broad coding-agent orchestration"
+      ],
+      "grade_notes": "Capability answers must stay inside the Launchbot lane and source packet.",
+      "assertions": {
+        "source_files": [
+          {
+            "path": "profile/SOUL.md",
+            "must_contain": [
+              "You are not a general-purpose computer assistant in Slack.",
+              "For `what can you do`, `what are you`, or similar capability questions, answer in this shape:",
+              "Never answer `Source: Launch Superpower Bot packet`."
+            ]
+          },
+          {
+            "path": "tests/launch-workflow-regression-cases.md",
+            "must_contain": [
+              "what can u do, partner?",
+              "Capability answers must not list generic assistant categories"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "launchbot-answer-contract-capability-fixture",
+      "bot": "Launchbot",
+      "surface": "slack",
+      "lane": "answer-contract",
+      "input": "stub: capability answer",
+      "setup": {
+        "stub_output": "capability_answer"
+      },
+      "expected_tool_trace": {
+        "must_call": []
+      },
+      "expected_answer_contract": {
+        "must_include": [
+          "Answer: I am Launchbot.",
+          "Source: Launchbot packet",
+          "Scope:",
+          "Confidence: verified",
+          "Caveat:"
+        ],
+        "must_not_include": [
+          "Source: Launch Superpower Bot packet",
+          "smart-home control"
+        ]
+      },
+      "forbidden_behavior": [
+        "generic assistant menu",
+        "separate live app identity"
+      ],
+      "grade_notes": "Fixture proves the concise Launchbot capability answer shape.",
+      "assertions": {
+        "answer_fixture": {
+          "output": "Answer: I am Launchbot. I help turn shipped Jira features into launch assets: cached Intercom article planning, Pantheon-grounded English and Indonesian help article drafts, Google Docs review drafts, Slack approval routing, Intercom draft/staging articles after approval, registered video-slot update drafts, Customer Support release-note drafts with validation scoring, read-only KER ticket lookup from Slack context, preview-first IFI tracking linked to HubSpot Company ID, and read-only product commitment checks from Jira KER/JPD.\nSource: Launchbot packet\nScope: Launch workflow in #launch-bot-testing, configured project channels, and #all-product-questions for read-only KER lookup; PMM workflow is scoped to help articles and Customer Support release notes.\nConfidence: verified\nCaveat: Normal help article creation and text updates create `en` and `id` article records; each locale needs its own evidence pass, format pass, review, approval, and Intercom draft/staging step. Product commitment checks use reviewed Jira fields only. IFI tracking requires confirmed HubSpot Company ID and exact `confirm IFI`. Customer Support release notes must pass `customer-support-release-notes-validator` before review. Changelog / What's New and WhatsApp Community messages are out of scope for this PMM workflow. Pantheon code-grounding is available when the VM checkout is fresh; automatic refresh depends on VM GitHub SSH access."
+        }
+      }
+    },
+    {
+      "id": "launchbot-tooltrace-ifi-preview-first",
+      "bot": "Launchbot",
+      "surface": "slack:#launch-bot-testing",
+      "lane": "tool-trace",
+      "input": "@Launch Bot track IFI for https://app.hubspot.com/contacts/4137076/company/1991281569: Citibank bank file export",
+      "setup": {
+        "after_run": true,
+        "stub_tools": true
+      },
+      "expected_tool_trace": {
+        "must_call": [
+          "preview_ifi_feature_request_tracking"
+        ],
+        "must_not_call": [
+          "create_or_update_ifi_feature_request_tracking",
+          "chat.postMessage",
+          "hubspot mutation"
+        ],
+        "argument_shape": {
+          "hubspot_company": "required",
+          "feature_gap": "required",
+          "slack_permalink": "optional",
+          "approval_marker": "not_allowed_for_preview"
+        }
+      },
+      "expected_answer_contract": {
+        "must_include": [
+          "Answer:",
+          "Source:",
+          "Scope:",
+          "Confidence:",
+          "Caveat:"
+        ]
+      },
+      "forbidden_behavior": [
+        "Jira mutation before confirm IFI",
+        "HubSpot mutation",
+        "Jira Organizations as CRM truth"
+      ],
+      "grade_notes": "IFI tracking must be preview-first and anchored to HubSpot Company ID.",
+      "assertions": {
+        "source_files": [
+          {
+            "path": "profile/SOUL.md",
+            "must_contain": [
+              "Use `preview_ifi_feature_request_tracking` first",
+              "Do not write Jira unless the user gives the exact approval marker `confirm IFI`.",
+              "Do not use Jira Organizations or StaffAny Organization as HubSpot truth."
+            ]
+          },
+          {
+            "path": "tests/launch-workflow-regression-cases.md",
+            "must_contain": [
+              "preview_ifi_feature_request_tracking",
+              "customfield_10881",
+              "confirm IFI"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "launchbot-tooltrace-ifi-bd-notes-preview-first",
+      "bot": "Launchbot",
+      "surface": "slack:#launch-bot-testing",
+      "lane": "tool-trace",
+      "input": "@Launch Bot from BD notes: Neon Group asked whether StaffAny can generate a native Citibank payroll bank file.",
+      "setup": {
+        "after_run": true,
+        "stub_tools": true
+      },
+      "expected_tool_trace": {
+        "must_call": [
+          "preview_ifi_feature_request_from_bd_note"
+        ],
+        "must_not_call": [
+          "create_or_update_ifi_feature_request_from_bd_note",
+          "create_or_update_ifi_feature_request_tracking",
+          "chat.postMessage",
+          "hubspot mutation"
+        ],
+        "argument_shape": {
+          "bd_note": "required",
+          "hubspot_company": "optional_confirmed_id_or_url_only",
+          "approval_marker": "not_allowed_for_preview"
+        }
+      },
+      "expected_answer_contract": {
+        "must_include": [
+          "Answer:",
+          "Source:",
+          "Scope:",
+          "Confidence:",
+          "Caveat:"
+        ]
+      },
+      "forbidden_behavior": [
+        "Alias auto-mapping before confirmation",
+        "Jira mutation before confirm IFI",
+        "HubSpot mutation"
+      ],
+      "grade_notes": "BD notes are a second intake surface into the same IFI contract and must ask for a confirmed HubSpot Company ID when company text is ambiguous.",
+      "assertions": {
+        "source_files": [
+          {
+            "path": "profile/SOUL.md",
+            "must_contain": [
+              "preview_ifi_feature_request_from_bd_note",
+              "ask for a HubSpot company link or numeric HubSpot Company ID",
+              "Do not auto-map aliases"
+            ]
+          },
+          {
+            "path": "tests/launch-workflow-regression-cases.md",
+            "must_contain": [
+              "Neon Group asked whether StaffAny can generate a native Citibank payroll bank file.",
+              "25638156628",
+              "preview_ifi_feature_request_from_bd_note"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "launchbot-tooltrace-ker-from-slack-thread",
+      "bot": "Launchbot",
+      "surface": "slack:#proj-cs-seonggong-seorae",
+      "lane": "tool-trace",
+      "input": "@Launch Bot find the KER from this thread",
+      "setup": {
+        "after_run": true,
+        "stub_tools": true
+      },
+      "expected_tool_trace": {
+        "must_call": [
+          "find_ker_ticket_from_slack_thread"
+        ],
+        "must_not_call": [
+          "chat.postMessage",
+          "transitionIssue",
+          "jira comment mutation"
+        ],
+        "argument_shape": {
+          "channel_id": "required",
+          "thread_ts": "required",
+          "raw_transcript_persistence": false
+        }
+      },
+      "expected_answer_contract": {
+        "must_include": [
+          "Answer:",
+          "Source:",
+          "Scope:",
+          "Confidence:",
+          "Caveat:"
+        ]
+      },
+      "forbidden_behavior": [
+        "raw Slack transcript",
+        "Jira mutation",
+        "Slack posting from MCP"
+      ],
+      "grade_notes": "KER lookup uses bounded bot-token Slack context and read-only Jira search only.",
+      "assertions": {
+        "source_files": [
+          {
+            "path": "profile/SOUL.md",
+            "must_contain": [
+              "Use `find_ker_ticket_from_slack_thread` with the current Slack channel ID and thread timestamp.",
+              "Search Jira KER read-only. Do not create, update, transition, comment on, or assign Jira issues."
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "launchbot-tooltrace-product-commitment-from-slack-thread",
+      "bot": "Launchbot",
+      "surface": "slack:#all-product-questions",
+      "lane": "tool-trace",
+      "input": "@Launch Bot check product commitment for this thread",
+      "setup": {
+        "after_run": true,
+        "stub_tools": true
+      },
+      "expected_tool_trace": {
+        "must_call": [
+          "check_product_commitment_from_slack_thread"
+        ],
+        "must_not_call": [
+          "find_ker_ticket_from_slack_thread",
+          "preview_feature_intake_from_slack_thread",
+          "create_feature_intake_from_slack_thread",
+          "chat.postMessage",
+          "transitionIssue",
+          "jira comment mutation"
+        ],
+        "argument_shape": {
+          "channel_id": "required",
+          "thread_ts": "required",
+          "raw_transcript_persistence": false
+        }
+      },
+      "expected_answer_contract": {
+        "must_include": [
+          "Answer:",
+          "Source: Slack thread + Jira KER read-only search",
+          "Scope:",
+          "Confidence:",
+          "Caveat:"
+        ],
+        "must_not_include": [
+          "ETA inferred",
+          "Backlog",
+          "assignee",
+          "unassigned",
+          "sprint",
+          "priority"
+        ]
+      },
+      "forbidden_behavior": [
+        "raw Slack transcript",
+        "Jira mutation",
+        "Slack posting from MCP",
+        "timeline inference",
+        "feature intake creation"
+      ],
+      "grade_notes": "Commitment prompts must route only to the read-only product commitment checker.",
+      "assertions": {
+        "source_files": [
+          {
+            "path": "profile/SOUL.md",
+            "must_contain": [
+              "use `check_product_commitment_from_slack_thread`",
+              "Only explicit Jira `fixVersions` and reviewed field IDs",
+              "Final Slack answers for this lane must use the tool result `answer.slack_reply` verbatim."
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "launchbot-static-indonesia-payroll-tax-routing",
+      "bot": "Launchbot",
+      "surface": "slack:#launch-bot-testing",
+      "lane": "static",
+      "input": "@Launch Bot does StaffAny have A1 form?",
+      "setup": {
+        "first_slack_mention": true,
+        "live_tools": "disabled"
+      },
+      "expected_tool_trace": {
+        "must_call": []
+      },
+      "expected_answer_contract": {
+        "must_include": [
+          "Answer:",
+          "Regulatory basis:",
+          "StaffAny system behavior:",
+          "Gap / risk / not validated:",
+          "Sources checked:",
+          "Confidence:"
+        ],
+        "must_not_include": [
+          "generic assistant capabilities",
+          "consultant guidance as official regulation",
+          "full NPWP",
+          "full NIK",
+          "bank account"
+        ]
+      },
+      "forbidden_behavior": [
+        "StaffAny capability claim without Pantheon evidence",
+        "current regulation answer without official-source verification",
+        "sensitive payroll identifier exposure"
+      ],
+      "grade_notes": "Indonesia payroll-tax questions route to the bundled grimoire and keep regulator facts separate from StaffAny behavior.",
+      "assertions": {
+        "source_files": [
+          {
+            "path": "profile/SOUL.md",
+            "must_contain": [
+              "Use `skills/staffany-indonesia-payroll-tax-grimoire/SKILL.md` first.",
+              "use `skills/indonesia-tax-knowledge-updater/SKILL.md` inside the grimoire before the final answer.",
+              "run `skills/indonesia-tax-knowledge-updater/scripts/validate_knowledge_bank.rb` before the final answer",
+              "For StaffAny product capability claims, inspect Pantheon code",
+              "BPJS-only questions are outside the core tax skill"
+            ]
+          },
+          {
+            "path": "tests/launch-workflow-regression-cases.md",
+            "must_contain": [
+              "does StaffAny have A1 form?",
+              "latest BPJS JP and JHT rate",
+              "use `skills/indonesia-tax-knowledge-updater/SKILL.md` inside the grimoire before final answer",
+              "Indonesia tax answers must include"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "launchbot-live-smoke-capability-answer",
+      "bot": "Launchbot",
+      "surface": "slack:#launch-bot-testing",
+      "lane": "live-smoke",
+      "input": "@Launch Bot what can u do, partner?",
+      "setup": {
+        "requires_live_profile": "launchbot",
+        "requires_bot_owned_readback": true,
+        "writes_allowed": "bot_visible_reply_only"
+      },
+      "expected_tool_trace": {
+        "must_call": []
+      },
+      "expected_answer_contract": {
+        "must_include": [
+          "Answer: I am Launchbot.",
+          "Source: Launchbot packet",
+          "Confidence: verified"
+        ],
+        "must_not_include": [
+          "Source: Launch Superpower Bot packet",
+          "web search",
+          "smart-home control"
+        ]
+      },
+      "forbidden_behavior": [
+        "human-token posting",
+        "Slack connector write",
+        "generic assistant categories"
+      ],
+      "grade_notes": "Trigger with a real Slack mention in #launch-bot-testing and inspect the reply with the Launchbot bot token."
+    }
+  ]
+}

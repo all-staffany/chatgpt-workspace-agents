@@ -1,0 +1,249 @@
+profiles:
+  - name: staffanydatabot
+    display_name: Da Ta Hermz
+    canonical_profile: staffanydatabot
+    live_profile: staffanydatabot
+    status: production_poc
+    owner: revops
+    app_packet: apps/hermes-data-bot
+    deploy_host: hermes-data-bot-poc
+    profile_dir: ${HOME}/.hermes/profiles/staffanydatabot
+    local_profile_policy: cloud_only
+    service:
+      systemd_unit: hermes-gateway-staffanydatabot.service
+    slack:
+      bot_name: da-ta-hermz
+      home_channel_id: C0AU19E6T0C
+      home_channel_name: da-ta-hermz-testing
+      allowed_channel_ids: [C0AU19E6T0C]
+      report_prefix: "Hermes repair automation:"
+    required_mcp:
+      staffany_bigquery: 4
+      staffany_slack_context: 2
+      staffany_google_sheets: 2
+    expected_crons:
+      - name: staffanydatabot health check
+        schedule: "0 1 * * 1-5"
+        mode: no-agent
+      - name: staffanydatabot local cloud heartbeat
+        schedule: "*/15 * * * *"
+        mode: no-agent
+      - name: staffanydatabot high-priority release feature usage digest
+        schedule: "0 9 * * 1"
+        mode: agent
+    checks:
+      health_command: apps/hermes-data-bot/runtime/check-health.sh
+      audit_command: apps/hermes-data-bot/runtime/audit-live-profile.sh
+    recovery:
+      restart_gateway: managed_only
+      stale_socket_seconds: 300
+      stale_session_minutes: 30
+      profile_sync: manual_review
+      pause_unsafe_crons: true
+      post_slack_report: true
+
+  - name: nurtureanysalesbot
+    display_name: NurtureAny
+    canonical_profile: nurtureanysalesbot
+    live_profile: nurtureanysalesbot
+    workflow_aliases: [sales-manager workflows, manager chase]
+    status: production_poc
+    owner: revops
+    app_packet: apps/nurtureany-sales-bot
+    deploy_host: nurtureany-sales-bot-prod
+    profile_dir: ${HOME}/.hermes/profiles/nurtureanysalesbot
+    local_profile_policy: cloud_only
+    service:
+      systemd_unit: hermes-gateway-nurtureanysalesbot.service
+    slack:
+      bot_name: nurtureany
+      home_channel_id: C0B2UGK4DB6
+      home_channel_name: nurtureany-testing
+      allowed_channel_ids: [C0B2UGK4DB6]
+      blocked_until_member_channel_ids: [C06CD9B6LDU, C06V8DS1B7B]
+      report_prefix: "NurtureAny automation:"
+    required_mcp:
+      slack_nurtureany: 5
+      staffany_bigquery: 4
+      hubspot_nurtureany: 60
+      google_calendar_nurtureany: 2
+      google_drive_nurtureany: 5
+      eazybe_nurtureany: 4
+      luma_nurtureany: 3
+      public_research_nurtureany: 2
+      lusha_nurtureany: 3
+      exa_nurtureany: 1
+      near_me_nurtureany: 6
+    expected_crons:
+      - name: nurtureanysalesbot health check
+        schedule: "0 1 * * 1-5"
+        mode: no-agent
+      - name: nurtureanysalesbot live profile audit
+        schedule: "15 1 * * 1-5"
+        mode: no-agent
+      - name: nurtureanysalesbot Slack socket watchdog
+        schedule: "*/5 * * * *"
+        mode: no-agent
+      - name: nurtureanysalesbot HubSpot task reminders
+        schedule: "0 1 * * 1-5"
+        mode: no-agent
+        script: nurtureany_sales_task_reminders.py
+        deliver: slack:#nurtureany-testing
+      - name: nurtureanysalesbot HubSpot task EOD catch-up
+        schedule: "0 9 * * 1-5"
+        mode: no-agent
+        script: nurtureany_sales_task_reminders_eod.py
+        deliver: slack:#nurtureany-testing
+      - name: SG MY WhatsApp Morning Blitz Report
+        schedule: "35 2 * * 1-5"
+        mode: agent
+        owner: eugene@staffany.com
+        deliver: slack:C04HYF0NM8A
+      - name: ID Morning WhatsApp Blitz Report
+        schedule: "45 3 * * 1-5"
+        mode: agent
+        owner: eugene@staffany.com
+        deliver: slack:C0B2UGK4DB6
+      - name: ID WhatsApp Morning Blitz Report
+        schedule: "35 3 * * 1-5"
+        mode: no-agent
+        script: nurtureany_sales_whatsapp_report_runner.py
+        deliver: local
+        delivery_channel: slack:C04MSJ1BGF9
+    unsafe_cron_name_prefixes: [event-roi-]
+    checks:
+      health_command: apps/nurtureany-sales-bot/runtime/check-health.sh
+      audit_command: RUN_NESTED_HEALTH_CHECK=0 apps/nurtureany-sales-bot/runtime/audit-live-profile.sh
+    recovery:
+      restart_gateway: managed_only
+      stale_socket_seconds: 300
+      stale_session_minutes: 30
+      profile_sync: canonical_rsync
+      pause_unsafe_crons: true
+      post_slack_report: true
+
+  - name: psmopsbot
+    display_name: PSM Ops Bot
+    canonical_profile: psmopsbot
+    live_profile: psmopsbot
+    workflow_aliases: [PS WEE, PS Wee Manager, PSM Manager Ops Bot, ps wee manager, ps wee, psm manager ops bot]
+    status: production_poc
+    owner: psm
+    app_packet: apps/psm-ops-bot
+    deploy_host: hermes-psm-ops-bot-poc
+    profile_dir: ${HOME}/.hermes/profiles/psmopsbot
+    local_profile_policy: cloud_only
+    service:
+      systemd_unit: hermes-gateway-psmopsbot.service
+    slack:
+      bot_name: ps_wee_manager
+      home_channel_id: C0B2VT50YT1
+      home_channel_name: ps-weeman-bot-test
+      open_channel_mode: true
+      require_mention: true
+      strict_mention: true
+      allowed_channel_ids: []
+      report_prefix: "PSM Ops automation:"
+    required_mcp:
+      psm_jira: 28
+      psm_c360: 3
+      psm_google_geocode: 3
+    expected_crons:
+      - name: psmopsbot due-date reminders
+        schedule: "0 1 * * 1-5"
+        mode: no-agent
+        script: psm_ops_due_date_reminders.py
+        deliver: slack:#ps-weeman-bot-test
+      - name: psmopsbot assignment hygiene
+        schedule: "15 1 * * 1-5"
+        mode: no-agent
+        script: psm_ops_pco_assignment_hygiene.py
+        deliver: slack:#ps-weeman-bot-test
+      - name: psmopsbot due-date eod catch-up
+        schedule: "0 9 * * 1-5"
+        mode: no-agent
+        script: psm_ops_due_date_reminders_eod.py
+        deliver: slack:#ps-weeman-bot-test
+      - name: psmopsbot roi tracker sync
+        schedule: "*/30 1-10 * * 1-5"
+        mode: no-agent
+        script: psm_ops_roi_tracker_sync.py
+        deliver: slack:#ps-weeman-bot-test
+      - name: psmopsbot churn reporting chase
+        schedule: "0 1 * * 1"
+        mode: no-agent
+        script: psm_ops_churn_reporting_chase.py
+        deliver: slack:#team-rev-account-management
+        source_sql: runtime/sql/psm_ops_churn_projection_dashboard_292.sql
+      - name: psmopsbot local cloud heartbeat
+        schedule: "*/15 * * * *"
+        mode: no-agent
+      - name: psmopsbot adoption digest
+        schedule: "0 2 * * 1-5"
+        mode: no-agent
+        deliver: slack:#ps-weeman-bot-test
+    checks:
+      health_command: apps/psm-ops-bot/runtime/check-health.sh
+      audit_command: apps/psm-ops-bot/runtime/audit-live-profile.sh
+    recovery:
+      restart_gateway: managed_only
+      stale_socket_seconds: 300
+      stale_session_minutes: 30
+      profile_sync: canonical_rsync
+      pause_unsafe_crons: true
+      post_slack_report: true
+
+  - name: launchbot
+    display_name: Launchbot
+    canonical_profile: launchbot
+    live_profile: launchbot
+    status: experimental
+    owner: revops
+    app_packet: apps/launchbot
+    deploy_host: hermes-data-bot-poc
+    profile_dir: ${HOME}/.hermes/profiles/launchbot
+    local_profile_policy: cloud_only
+    service:
+      systemd_unit: hermes-gateway-launchbot.service
+    slack:
+      bot_name: launchbot
+      home_channel_id: C0B32M34J3W
+      home_channel_name: launch-bot-testing
+      allowed_channel_ids: [C0B32M34J3W, C0AJAUNCEL8, C01RZ7SHC8K, CF8PK6V4J]
+      report_prefix: "Hermes repair automation:"
+    required_mcp:
+      launchbot_ker:
+        tools: 2
+      launchbot_ifi:
+        tools: 4
+      launchbot_product_commitment:
+        tools: 1
+      launchbot_feature_intake:
+        tools: 2
+      launchbot_support_watch:
+        tools: 1
+      launchbot_help_article:
+        tools: 2
+    expected_crons:
+      - name: launchbot health check
+        schedule: "*/5 * * * *"
+        mode: no-agent
+      - name: launchbot feature intake monitor
+        schedule: "* * * * *"
+        mode: no-agent
+      - name: launchbot support watch
+        schedule: "0 1 * * 4"
+        mode: no-agent
+      - name: launchbot pantheon repo update
+        schedule: "0 22 * * *"
+        mode: no-agent
+    checks:
+      health_command: apps/launchbot/runtime/check-health.sh
+      audit_command: apps/launchbot/runtime/audit-live-profile.sh
+    recovery:
+      restart_gateway: managed_only
+      stale_socket_seconds: 300
+      stale_session_minutes: 30
+      profile_sync: canonical_rsync
+      pause_unsafe_crons: true
+      post_slack_report: true

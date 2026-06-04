@@ -1,0 +1,746 @@
+{
+  "app_name": "Launchbot",
+  "app_slug": "launchbot",
+  "kind": "hermes-runtime-app",
+  "canonical": true,
+  "runtime": "Hermes Agent",
+  "profile_name": "launchbot",
+  "rollout_stage": "Experimental Slack profile in #launch-bot-testing",
+  "model_provider": "anthropic",
+  "model": "claude-sonnet-4-6",
+  "paths": {
+    "todo": "TODO.md",
+    "soul": "profile/SOUL.md",
+    "config_template": "profile/config.template.yaml",
+    "slack_runtime": "runtime/slack.md",
+    "health_checks": "runtime/health-checks.md",
+    "health_check_script": "runtime/check-health.sh",
+    "live_profile_audit_script": "runtime/audit-live-profile.sh",
+    "pantheon_update_script": "runtime/update-pantheon-repo.sh",
+    "ker_mcp_server": "runtime/mcp/launchbot_ker_server.py",
+    "ker_mcp_tests": "runtime/mcp/test_launchbot_ker_server.py",
+    "ifi_mcp_server": "runtime/mcp/launchbot_ifi_server.py",
+    "ifi_mcp_tests": "runtime/mcp/test_launchbot_ifi_server.py",
+    "product_commitment_mcp_server": "runtime/mcp/launchbot_product_commitment_server.py",
+    "product_commitment_mcp_tests": "runtime/mcp/test_launchbot_product_commitment_server.py",
+    "feature_intake_core": "runtime/mcp/launchbot_feature_intake_core.py",
+    "feature_intake_mcp_server": "runtime/mcp/launchbot_feature_intake_server.py",
+    "feature_intake_mcp_tests": "runtime/mcp/test_launchbot_feature_intake_server.py",
+    "feature_intake_monitor": "runtime/monitor-feature-intake.py",
+    "feature_intake_monitor_tests": "runtime/test_monitor_feature_intake.py",
+    "support_watch_core": "runtime/mcp/launchbot_support_watch_core.py",
+    "support_watch_mcp_server": "runtime/mcp/launchbot_support_watch_server.py",
+    "support_watch_mcp_tests": "runtime/mcp/test_launchbot_support_watch_server.py",
+    "support_watch_monitor": "runtime/monitor-support-watch.py",
+    "support_watch_monitor_tests": "runtime/test_monitor_support_watch.py",
+    "support_watch_whatsapp_refresh_sql": "runtime/support-watch-whatsapp-refresh.sql",
+    "help_article_mcp_server": "runtime/mcp/launchbot_help_article_server.py",
+    "help_article_mcp_tests": "runtime/mcp/test_launchbot_help_article_server.py",
+    "help_article_video_fixtures": "runtime/mcp/fixtures/help_article_video_fixtures.json",
+    "help_article_jira_shipped_windmill_flow": "runtime/windmill/launchbot_ker_help_article_on_shipped.mjs",
+    "help_article_jira_shipped_windmill_tests": "runtime/windmill/launchbot_ker_help_article_on_shipped.test.mjs",
+    "help_article_jira_shipped_state_schema": "runtime/windmill/launchbot_help_article_runs.sql",
+    "launch_workflow": "runtime/launch-workflow.md",
+    "handoff_runner": "runtime/launchbot_e2e.py",
+    "intercom_format_gate": "runtime/intercom-format-gate.mjs",
+    "intercom_format_gate_tests": "runtime/intercom-format-gate.test.mjs",
+    "help_article_skill": "skills/help-article-generator/SKILL.md",
+    "help_article_validator_skill": "skills/help-article-validator/SKILL.md",
+    "help_article_feedback_updater_skill": "skills/help-article-feedback-updater/SKILL.md",
+    "help_article_screenshot_skill": "skills/help-article-screenshot-capture/SKILL.md",
+    "help_article_screenshot_troubleshooter_skill": "skills/help-article-screenshot-troubleshooter/SKILL.md",
+    "product_marketing_launch_workflow_skill": "skills/product-marketing-launch-workflow/SKILL.md",
+    "launch_priority_identifier_skill": "skills/launch-priority-identifier/SKILL.md",
+    "customer_support_release_notes_generator_skill": "skills/customer-support-release-notes-generator/SKILL.md",
+    "customer_support_release_notes_validator_skill": "skills/customer-support-release-notes-validator/SKILL.md",
+    "customer_support_release_notes_feedback_updater_skill": "skills/customer-support-release-notes-feedback-updater/SKILL.md",
+    "help_article_screenshot_runner": "runtime/help-article-screenshot-runner.mjs",
+    "help_article_staging_auth_state_runner": "runtime/help-article-staging-auth-state.mjs",
+    "help_article_staging_auth_state_tests": "runtime/help-article-staging-auth-state.test.mjs",
+    "scheduled_disbursement_screenshot_plan": "output/help-articles/screenshot-plans/create-and-manage-disbursement-scheduled-disbursement.json",
+    "help_article_skeleton": "skills/help-article-generator/references/help-article-skeleton.md",
+    "intercom_format_profile": "skills/help-article-generator/references/intercom-format-profile.json",
+    "article_planning_profile": "skills/help-article-generator/references/article-planning-profile.json",
+    "intercom_article_inventory": "skills/help-article-generator/references/intercom-article-inventory.json",
+    "help_article_video_registry": "skills/help-article-generator/references/video-placement-registry.json",
+    "help_article_model_references": "skills/help-article-validator/references/model-help-articles.md",
+    "support_watch_skill": "skills/weekly-support-watch/SKILL.md",
+    "indonesia_payroll_tax_skill": "skills/staffany-indonesia-payroll-tax-grimoire/SKILL.md",
+    "indonesia_tax_knowledge_updater_skill": "skills/staffany-indonesia-payroll-tax-grimoire/skills/indonesia-tax-knowledge-updater/SKILL.md",
+    "indonesia_tax_knowledge_validator": "skills/staffany-indonesia-payroll-tax-grimoire/skills/indonesia-tax-knowledge-updater/scripts/validate_knowledge_bank.rb",
+    "indonesia_payroll_tax_reporting_reference": "skills/staffany-indonesia-payroll-tax-grimoire/skills/indonesia-payroll-tax-advisor/references/reporting.md",
+    "indonesia_payroll_tax_pph21_reference": "skills/staffany-indonesia-payroll-tax-grimoire/skills/indonesia-payroll-tax-advisor/references/pph21.md",
+    "indonesia_payroll_tax_source_quality_reference": "skills/staffany-indonesia-payroll-tax-grimoire/skills/indonesia-payroll-tax-advisor/references/source-quality.md",
+    "launch_priority_materials_reference": "skills/product-marketing-launch-workflow/references/launch-priority-materials.md",
+    "launch_workflow_regression_cases": "tests/launch-workflow-regression-cases.md",
+    "prompt_evals": "tests/prompt-evals.json"
+  },
+  "channels": [
+    "Slack #launch-bot-testing",
+    "Slack #proj-cs-seonggong-seorae",
+    "Slack #all-product-questions",
+    "Slack #input-features-ux",
+    "Slack #all-bugs-production"
+  ],
+  "slack": {
+    "home_channel_id": "C0B32M34J3W",
+    "home_channel_name": "launch-bot-testing",
+    "allowed_channel_ids": [
+      "C0B32M34J3W",
+      "C0AJAUNCEL8",
+      "C01RZ7SHC8K",
+      "CF8PK6V4J"
+    ],
+    "require_mention": true,
+    "reactions": false,
+    "gateway_restart_notification": false,
+    "socket_mode": true,
+    "required_bot_events": [
+      "app_mention",
+      "message.channels"
+    ],
+    "required_oauth_scopes": [
+      "app_mentions:read",
+      "channels:history",
+      "channels:read",
+      "channels:join",
+      "chat:write"
+    ],
+    "event_subscription_drift_guard": "Launchbot Socket Mode must subscribe to message.channels or channel mentions/replies will not reach the Hermes gateway."
+  },
+  "feature_intake_monitor": {
+    "mode": "no_agent_slack_poll",
+    "default_channel_ids": [
+      "CF8PK6V4J"
+    ],
+    "channel_ids_env_var": "LAUNCHBOT_FEATURE_INTAKE_MONITOR_CHANNEL_IDS",
+    "state_path_env_var": "LAUNCHBOT_FEATURE_INTAKE_MONITOR_STATE_PATH",
+    "default_state_path": "~/.hermes/profiles/launchbot/runtime/feature-intake-monitor-state.json",
+    "max_messages_per_run_env_var": "LAUNCHBOT_FEATURE_INTAKE_MONITOR_MAX_MESSAGES_PER_RUN",
+    "default_max_messages_per_run": 100,
+    "overlap_seconds_env_var": "LAUNCHBOT_FEATURE_INTAKE_MONITOR_OVERLAP_SECONDS",
+    "default_overlap_seconds": 600,
+    "required_confirmation": [
+      "create intake",
+      "create KER intake"
+    ],
+    "normal_gateway_require_mention": true,
+    "raw_transcript_persistence": false,
+    "posts_slack_previews": true,
+    "slack_reply_prefix": "Launchbot automation:",
+    "approver_allowlist_env_var": "LAUNCHBOT_FEATURE_INTAKE_APPROVER_USER_IDS",
+    "cron": {
+      "name": "launchbot feature intake monitor",
+      "schedule": "* * * * *",
+      "mode": "no-agent"
+    }
+  },
+  "support_watch_monitor": {
+    "mode": "no_agent_weekly_report",
+    "default_output_channel_name": "all-bugs-production",
+    "output_channel_name_env_var": "LAUNCHBOT_SUPPORT_WATCH_OUTPUT_CHANNEL_NAME",
+    "output_channel_id_env_var": "LAUNCHBOT_SUPPORT_WATCH_OUTPUT_CHANNEL_ID",
+    "dedupe_channel_ids_env_var": "LAUNCHBOT_SUPPORT_WATCH_DEDUPE_CHANNEL_IDS",
+    "dedupe_channel_names_env_var": "LAUNCHBOT_SUPPORT_WATCH_DEDUPE_CHANNEL_NAMES",
+    "edt_jql_env_var": "LAUNCHBOT_SUPPORT_WATCH_EDT_JQL",
+    "state_path_env_var": "LAUNCHBOT_SUPPORT_WATCH_STATE_PATH",
+    "default_state_path": "~/.hermes/profiles/launchbot/runtime/support-watch-state.json",
+    "lookback_days_env_var": "LAUNCHBOT_SUPPORT_WATCH_LOOKBACK_DAYS",
+    "default_lookback_days": 7,
+    "max_tickets_env_var": "LAUNCHBOT_SUPPORT_WATCH_MAX_TICKETS",
+    "default_max_tickets": 100,
+    "default_edt_jql": "project = PCO AND \"PS Team\" = \"Eng Duty\" AND statusCategory != Done ORDER BY updated DESC",
+    "source_env_var": "LAUNCHBOT_SUPPORT_WATCH_SOURCE",
+    "default_source": "bigquery",
+    "intercom_project_env_var": "LAUNCHBOT_SUPPORT_WATCH_INTERCOM_PROJECT",
+    "default_intercom_project": "staffany-warehouse",
+    "intercom_dataset_env_var": "LAUNCHBOT_SUPPORT_WATCH_INTERCOM_DATASET",
+    "default_intercom_dataset": "intercom",
+    "bq_timeout_seconds_env_var": "LAUNCHBOT_SUPPORT_WATCH_BQ_TIMEOUT_SECONDS",
+    "default_bq_timeout_seconds": 240,
+    "include_whatsapp_env_var": "LAUNCHBOT_SUPPORT_WATCH_INCLUDE_WHATSAPP",
+    "default_include_whatsapp": true,
+    "whatsapp_view_env_var": "LAUNCHBOT_SUPPORT_WATCH_WHATSAPP_VIEW",
+    "default_whatsapp_view": "analytics.support_watch_whatsapp_ticket_logs",
+    "whatsapp_source_view_env_var": "LAUNCHBOT_SUPPORT_WATCH_WHATSAPP_SOURCE_VIEW",
+    "default_whatsapp_source_view": "gsheets.cs_tickets_logs_all_view",
+    "whatsapp_refresh_transfer_name_env_var": "LAUNCHBOT_SUPPORT_WATCH_WHATSAPP_REFRESH_TRANSFER_NAME",
+    "default_whatsapp_refresh_transfer_name": "Launchbot support watch WhatsApp native mirror refresh",
+    "whatsapp_refresh_schedule_utc_env_var": "LAUNCHBOT_SUPPORT_WATCH_WHATSAPP_REFRESH_SCHEDULE_UTC",
+    "default_whatsapp_refresh_schedule_utc": "every day 00:30",
+    "whatsapp_max_staleness_hours_env_var": "LAUNCHBOT_SUPPORT_WATCH_WHATSAPP_MAX_STALENESS_HOURS",
+    "default_whatsapp_max_staleness_hours": 36,
+    "dedupe_channel_name": "team-cs-eng-duty",
+    "default_dedupe_channel_names": "team-cs-eng-duty",
+    "normal_gateway_require_mention": true,
+    "raw_transcript_persistence": false,
+    "posts_slack_reports": true,
+    "slack_reply_prefix": "Launchbot automation:",
+    "ticket_creation": false,
+    "engineer_tags": false,
+    "owner_assignment": false,
+    "cron": {
+      "name": "launchbot support watch",
+      "schedule": "0 1 * * 4",
+      "timezone": "UTC",
+      "local_time": "Thursday 09:00 SGT",
+      "mode": "no-agent"
+    }
+  },
+  "tax_advisory": {
+    "mode": "source_backed_indonesia_payroll_tax_answers",
+    "skill": "skills/staffany-indonesia-payroll-tax-grimoire/SKILL.md",
+    "regulation_update_skill": "skills/staffany-indonesia-payroll-tax-grimoire/skills/indonesia-tax-knowledge-updater/SKILL.md",
+    "knowledge_bank_validator": "skills/staffany-indonesia-payroll-tax-grimoire/skills/indonesia-tax-knowledge-updater/scripts/validate_knowledge_bank.rb",
+    "topics": [
+      "PPh21",
+      "PPh26",
+      "TER",
+      "PTKP",
+      "DTP",
+      "SPT Masa PPh 21/26",
+      "e-Bupot 21/26",
+      "bukti potong",
+      "Formulir 1721-A1 / BPA1",
+      "BPMP",
+      "BP21",
+      "BP26",
+      "StaffAny Indonesia payroll-tax settings"
+    ],
+    "answer_contract": [
+      "Direct answer",
+      "Regulatory basis",
+      "StaffAny system behavior",
+      "Gap / risk / not validated",
+      "Sources checked",
+      "Confidence"
+    ],
+    "source_priority": [
+      "official_regulator_sources",
+      "official_djp_guidance",
+      "staffany_code_or_data_evidence",
+      "secondary_consultant_guidance"
+    ],
+    "current_fact_policy": "Before final answers about current laws, rates, forms, deadlines, or regulator platform changes, use the regulation update skill workflow to verify official online sources and record source title, publisher, URL, effective period, last checked date, status, and confidence.",
+    "pre_final_validation_policy": "If regulator knowledge is refreshed or added, run the knowledge-bank validator before final answer; if validation cannot run, say so and lower confidence.",
+    "staffany_behavior_policy": "Inspect Pantheon code, models, seeded references, or verified read-only query facts before claiming StaffAny product support.",
+    "bpjs_scope": "BPJS is outside the core tax skill unless it affects payroll-tax/reporting; answer BPJS-only questions from official BPJS/government sources and label the scope.",
+    "sensitive_data_policy": "Do not expose full NPWP, NIK, bank account, credentials, or unrelated employee payroll details."
+  },
+  "help_article_jira_shipped_windmill": {
+    "mode": "jira_transition_to_windmill_webhook",
+    "flow_name": "launchbot_ker_help_article_on_shipped",
+    "script": "runtime/windmill/launchbot_ker_help_article_on_shipped.mjs",
+    "state_table": "launchbot_help_article_runs",
+    "state_schema": "runtime/windmill/launchbot_help_article_runs.sql",
+    "trigger": {
+      "source": "Jira Automation",
+      "project_key": "KER",
+      "transition_to": "6 - Shipped & Launching",
+      "webhook_auth_env_var": "WINDMILL_WEBHOOK_TOKEN",
+      "idempotency_key": "issue_key + ':' + transitioned_at"
+    },
+    "jira": {
+      "base_url_env_var": "JIRA_BASE_URL",
+      "email_env_var": "JIRA_EMAIL",
+      "api_token_env_var": "JIRA_API_TOKEN",
+      "launch_priority_field_id_env_var": "JIRA_FIELD_LAUNCH_PRIORITY",
+      "launch_priority_field_id": "customfield_10561",
+      "product_lead_field_id_env_var": "JIRA_FIELD_PRODUCT_LEAD",
+      "current_status_required": "6 - Shipped & Launching",
+      "mutations": false
+    },
+    "slack": {
+      "bot_token_env_var": "SLACK_BOT_TOKEN",
+      "review_channel_id_env_var": "LAUNCHBOT_REVIEW_CHANNEL_ID",
+      "default_review_channel_id": "C0B32M34J3W",
+      "product_lead_mapping": [
+        "Jira user email -> Slack users.lookupByEmail",
+        "LAUNCHBOT_JIRA_ACCOUNT_TO_SLACK_USER_MAP fallback"
+      ],
+      "mention_gated_feedback": true,
+      "exact_publish_confirmation": "@Launch Bot publish help articles KER-123",
+      "post_prefix": "Launchbot automation:"
+    },
+    "intercom": {
+      "access_token_env_var": "INTERCOM_ACCESS_TOKEN",
+      "fallback_access_token_env_var": "LAUNCH_STEP3_INTERCOM_ACCESS_TOKEN",
+      "author_id_env_var": "INTERCOM_AUTHOR_ID",
+      "default_parent_id_env_var": "INTERCOM_HELP_ARTICLE_DEFAULT_PARENT_ID",
+      "create_state": "draft",
+      "publish_state": "published",
+      "update_draft_requires_verified_env_var": "LAUNCHBOT_INTERCOM_UPDATE_DRAFT_SUPPORTED",
+      "locales": [
+        "en",
+        "id"
+      ]
+    },
+    "guards": {
+      "launch_priority_required": true,
+      "product_lead_slack_mapping_required": true,
+      "pantheon_evidence_required": true,
+      "cached_intercom_planning_first": true,
+      "live_intercom_stale_check_before_write": true,
+      "english_source_before_indonesian": true,
+      "indonesian_needs_refresh_when_english_changes": true,
+      "product_lead_or_override_publish_only": true,
+      "auto_publish_after_exact_confirmation": true
+    }
+  },
+  "mcp": {
+    "launchbot_ker": {
+      "mode": "read_only",
+      "tools": [
+        "find_ker_ticket_from_slack_thread",
+        "lookup_ker_ticket_by_key"
+      ],
+      "slack_context": {
+        "token_env_var": "SLACK_BOT_TOKEN",
+        "configured_channel_ids_env_var": "LAUNCHBOT_KER_ALLOWED_CHANNEL_IDS",
+        "default_channel_ids": [
+          "C0B32M34J3W",
+          "C0AJAUNCEL8",
+          "C01RZ7SHC8K"
+        ],
+        "raw_transcript_persistence": false,
+        "user_token_fallback": false,
+        "slack_connector_fallback": false
+      },
+      "jira": {
+        "project_key": "KER",
+        "base_url_env_var": "JIRA_BASE_URL",
+        "email_env_var": "JIRA_EMAIL",
+        "api_token_env_var": "JIRA_API_TOKEN",
+        "mutations": false
+      }
+    },
+    "launchbot_ifi": {
+      "mode": "preview_first_confirmed_jira_mutation",
+      "tools": [
+        "preview_ifi_feature_request_tracking",
+        "create_or_update_ifi_feature_request_tracking",
+        "preview_ifi_feature_request_from_bd_note",
+        "create_or_update_ifi_feature_request_from_bd_note"
+      ],
+      "hubspot": {
+        "access_token_env_var": "HUBSPOT_ACCESS_TOKEN",
+        "private_app_token_env_var": "HUBSPOT_PRIVATE_APP_TOKEN",
+        "company_identity": "HubSpot Company ID",
+        "portal_id_env_var": "HUBSPOT_PORTAL_ID",
+        "default_portal_id": "4137076"
+      },
+      "jira": {
+        "project_key": "IFI",
+        "feature_request_issue_type_id": "10151",
+        "hubspot_company_id_field_id_env_var": "JIRA_IFI_HUBSPOT_COMPANY_ID_FIELD_ID",
+        "hubspot_company_id_field_id": "customfield_10881",
+        "hubspot_company_id_field_name": "HubSpot Company ID",
+        "base_url_env_var": "JIRA_BASE_URL",
+        "email_env_var": "JIRA_EMAIL",
+        "api_token_env_var": "JIRA_API_TOKEN",
+        "approval_marker": "confirm IFI",
+        "mutations": [
+          "create_issue",
+          "update_issue",
+          "link_issue"
+        ],
+        "slack_post": false
+      },
+      "bd_notes": {
+        "mode": "second_intake_surface_same_ifi_contract",
+        "requires_confirmed_hubspot_company_id": true,
+        "alias_auto_mapping": false,
+        "ambiguous_company_action": "ask_for_hubspot_company_link_or_numeric_id"
+      }
+    },
+    "launchbot_product_commitment": {
+      "mode": "read_only_commitment_check",
+      "tools": [
+        "check_product_commitment_from_slack_thread"
+      ],
+      "slack_context": {
+        "token_env_var": "SLACK_BOT_TOKEN",
+        "configured_channel_ids_env_var": "LAUNCHBOT_PRODUCT_COMMITMENT_ALLOWED_CHANNEL_IDS",
+        "default_channel_ids": [
+          "C0B32M34J3W",
+          "C01RZ7SHC8K"
+        ],
+        "raw_transcript_persistence": false,
+        "user_token_fallback": false,
+        "slack_connector_fallback": false
+      },
+      "jira": {
+        "project_key": "KER",
+        "base_url_env_var": "JIRA_BASE_URL",
+        "email_env_var": "JIRA_EMAIL",
+        "api_token_env_var": "JIRA_API_TOKEN",
+        "reviewed_commitment_fields_env_var": "LAUNCHBOT_PRODUCT_COMMITMENT_FIELD_IDS",
+        "standard_commitment_fields": [
+          "fixVersions"
+        ],
+        "mutations": false,
+        "comments": false,
+        "transitions": false,
+        "assignments": false,
+        "timeline_inference": false,
+        "intake_creation": false
+      }
+    },
+    "launchbot_feature_intake": {
+      "mode": "confirmed_jpd_intake_create",
+      "tools": [
+        "preview_feature_intake_from_slack_thread",
+        "create_feature_intake_from_slack_thread"
+      ],
+      "slack_context": {
+        "token_env_var": "SLACK_BOT_TOKEN",
+        "configured_channel_ids_env_var": "LAUNCHBOT_FEATURE_INTAKE_ALLOWED_CHANNEL_IDS",
+        "default_channel_ids": [
+          "C0B32M34J3W",
+          "CF8PK6V4J"
+        ],
+        "raw_transcript_persistence": false,
+        "user_token_fallback": false,
+        "slack_connector_fallback": false
+      },
+      "jira": {
+        "project_key": "KER",
+        "issue_type_id": "10043",
+        "base_url_env_var": "JIRA_BASE_URL",
+        "email_env_var": "JIRA_EMAIL",
+        "api_token_env_var": "JIRA_API_TOKEN",
+        "slack_prd_field_id": "customfield_10080",
+        "mutations": [
+          "create_issue"
+        ],
+        "comments": false,
+        "transitions": false,
+        "assignments": false
+      },
+      "confirmation": {
+        "required": true,
+        "phrase": "create intake",
+        "preview_first": true
+      }
+    },
+    "launchbot_support_watch": {
+      "mode": "read_only_weekly_support_watch",
+      "tools": [
+        "preview_weekly_support_watch_report"
+      ],
+      "bigquery": {
+        "source_env_var": "LAUNCHBOT_SUPPORT_WATCH_SOURCE",
+        "default_source": "bigquery",
+        "project_env_var": "LAUNCHBOT_SUPPORT_WATCH_INTERCOM_PROJECT",
+        "default_project": "staffany-warehouse",
+        "intercom_dataset_env_var": "LAUNCHBOT_SUPPORT_WATCH_INTERCOM_DATASET",
+        "default_intercom_dataset": "intercom",
+        "intercom_tables": [
+          "conversations",
+          "conversation_parts"
+        ],
+        "analytics_dataset_env_var": "LAUNCHBOT_SUPPORT_WATCH_ANALYTICS_DATASET",
+        "default_analytics_dataset": "analytics",
+        "bq_timeout_seconds_env_var": "LAUNCHBOT_SUPPORT_WATCH_BQ_TIMEOUT_SECONDS",
+        "default_bq_timeout_seconds": 240,
+        "org_mapping_table": "dim_org_company",
+        "include_whatsapp_env_var": "LAUNCHBOT_SUPPORT_WATCH_INCLUDE_WHATSAPP",
+        "default_include_whatsapp": true,
+        "whatsapp_view_env_var": "LAUNCHBOT_SUPPORT_WATCH_WHATSAPP_VIEW",
+        "default_whatsapp_view": "analytics.support_watch_whatsapp_ticket_logs",
+        "whatsapp_source_view_env_var": "LAUNCHBOT_SUPPORT_WATCH_WHATSAPP_SOURCE_VIEW",
+        "default_whatsapp_source_view": "gsheets.cs_tickets_logs_all_view",
+        "whatsapp_refresh_transfer_name_env_var": "LAUNCHBOT_SUPPORT_WATCH_WHATSAPP_REFRESH_TRANSFER_NAME",
+        "default_whatsapp_refresh_transfer_name": "Launchbot support watch WhatsApp native mirror refresh",
+        "whatsapp_refresh_schedule_utc_env_var": "LAUNCHBOT_SUPPORT_WATCH_WHATSAPP_REFRESH_SCHEDULE_UTC",
+        "default_whatsapp_refresh_schedule_utc": "every day 00:30",
+        "whatsapp_max_staleness_hours_env_var": "LAUNCHBOT_SUPPORT_WATCH_WHATSAPP_MAX_STALENESS_HOURS",
+        "default_whatsapp_max_staleness_hours": 36,
+        "raw_transcript_persistence": false
+      },
+      "slack_context": {
+        "token_env_var": "SLACK_BOT_TOKEN",
+        "dedupe_channel_ids_env_var": "LAUNCHBOT_SUPPORT_WATCH_DEDUPE_CHANNEL_IDS",
+        "dedupe_channel_names_env_var": "LAUNCHBOT_SUPPORT_WATCH_DEDUPE_CHANNEL_NAMES",
+        "dedupe_channel_name": "team-cs-eng-duty",
+        "output_channel_name_env_var": "LAUNCHBOT_SUPPORT_WATCH_OUTPUT_CHANNEL_NAME",
+        "output_channel_id_env_var": "LAUNCHBOT_SUPPORT_WATCH_OUTPUT_CHANNEL_ID",
+        "default_output_channel_name": "all-bugs-production",
+        "raw_transcript_persistence": false,
+        "user_token_fallback": false,
+        "slack_connector_fallback": false,
+        "mcp_posts_slack": false
+      },
+      "jira": {
+        "base_url_env_var": "JIRA_BASE_URL",
+        "email_env_var": "JIRA_EMAIL",
+        "api_token_env_var": "JIRA_API_TOKEN",
+        "edt_jql_env_var": "LAUNCHBOT_SUPPORT_WATCH_EDT_JQL",
+        "default_edt_jql": "project = PCO AND \"PS Team\" = \"Eng Duty\" AND statusCategory != Done ORDER BY updated DESC",
+        "mutations": false,
+        "comments": false,
+        "transitions": false,
+        "assignments": false
+      },
+      "pantheon": {
+        "checkout_env_var": "LAUNCHBOT_PANTHEON_REPO_DIR",
+        "trace_mode": "local_read_only_heuristic"
+      },
+      "v1_forbidden_actions": [
+        "linear_ticket_create",
+        "jira_ticket_create",
+        "engineer_tag",
+        "owner_assignment"
+      ]
+    },
+    "launchbot_help_article": {
+      "mode": "draft_only_registered_video_slots",
+      "tools": [
+        "preview_help_article_video_update",
+        "create_help_article_video_update_draft"
+      ],
+      "registry": "skills/help-article-generator/references/video-placement-registry.json",
+      "intercom": {
+        "access_token_env_var": "LAUNCH_STEP3_INTERCOM_ACCESS_TOKEN",
+        "article_api": "GET and PUT /articles/{article_id}",
+        "forced_state": "draft",
+        "mutations": [
+          "body"
+        ],
+        "publish": false,
+        "delete": false,
+        "tag_mutation": false,
+        "collection_mutation": false
+      },
+      "video": {
+        "provider": "loom",
+        "accepted_url_shapes": [
+          "https://www.loom.com/share/{video_id}",
+          "https://www.loom.com/embed/{video_id}"
+        ],
+        "normalized_url_shape": "https://www.loom.com/embed/{video_id}",
+        "reject_raw_video_files": true,
+        "reject_slack_file_urls": true
+      }
+    }
+  },
+  "source_repositories": {
+    "pantheon": {
+      "purpose": "StaffAny product behavior source of truth for help article drafting",
+      "remote": "git@github.com:staffany-eng/pantheon.git",
+      "branch": "develop",
+      "default_checkout": "~/.hermes/profiles/launchbot/source/pantheon",
+      "deploy_key_path": "~/.hermes/profiles/launchbot/ssh/pantheon_deploy_key",
+      "status_json": "~/.hermes/profiles/launchbot/runtime/pantheon-repo-status.json",
+      "update_mode": "git pull --ff-only",
+      "daily_update_requires": "VM GitHub SSH access to staffany-eng/pantheon"
+    }
+  },
+  "expected_crons": [
+    {
+      "name": "Launchbot support watch WhatsApp native mirror refresh",
+      "schedule": "every day 00:30",
+      "mode": "bigquery-scheduled-query",
+      "source": "staffany-warehouse.gsheets.cs_tickets_logs_all_view",
+      "target": "staffany-warehouse.analytics.support_watch_whatsapp_ticket_logs"
+    },
+    {
+      "name": "launchbot health check",
+      "schedule": "*/5 * * * *",
+      "mode": "no-agent"
+    },
+    {
+      "name": "launchbot feature intake monitor",
+      "schedule": "* * * * *",
+      "mode": "no-agent"
+    },
+    {
+      "name": "launchbot support watch",
+      "schedule": "0 1 * * 4",
+      "mode": "no-agent",
+      "local_time": "Thursday 09:00 SGT"
+    },
+    {
+      "name": "launchbot pantheon repo update",
+      "schedule": "0 22 * * *",
+      "mode": "no-agent",
+      "requires": "VM GitHub SSH access to staffany-eng/pantheon"
+    }
+  ],
+  "launch_workflow": {
+    "source_status": "skill_and_workflow_from_2026_05_11_handoff_source_code_not_present",
+    "test_feature": {
+      "jira_issue": "KER-1742",
+      "ticket_name": "Club Blue",
+      "feature": "ClubAny brands, perks, and redemptions",
+      "latest_clean_version": "v005"
+    },
+    "evidence": {
+      "raw_manifest": "research/raw/launch-superpower-bot/2026-05-11-handoff/source-manifest.md",
+      "raw_handoff": "research/raw/launch-superpower-bot/2026-05-11-handoff/handoff.md",
+      "source_note": "research/wiki/sources/launch-superpower-bot-handoff.md",
+      "intercom_shape_raw": "research/raw/staffany-intercom-help-article-shape/source-record.md",
+      "intercom_shape_source_note": "research/wiki/sources/staffany-intercom-help-article-shape.md",
+      "intercom_shape_synthesis": "research/wiki/syntheses/help-article-planning-rules.md"
+    },
+    "workflow_steps": [
+      {
+        "step": 0,
+        "name": "pantheon_evidence_and_intercom_format_gate",
+        "status": "implemented_in_packet",
+        "output": "read-only Pantheon evidence packs, live Intercom article search, cached article planning, curated format profile, and pre-publish draft gates"
+      },
+      {
+        "step": 1,
+        "name": "help_article_trigger",
+        "status": "skill_backed_handoff_runner",
+        "output": "code-grounded help article drafts and manifest"
+      },
+      {
+        "step": 2,
+        "name": "google_docs_approval",
+        "status": "skill_backed_handoff_runner",
+        "output": "per-article Google Docs and Slack review messages"
+      },
+      {
+        "step": 3,
+        "name": "intercom_publish",
+        "status": "skill_backed_handoff_runner",
+        "output": "Intercom draft articles after Slack approval reaction"
+      },
+      {
+        "step": 4,
+        "name": "launch_derivatives",
+        "status": "skill_backed_draft_evaluator",
+        "output": "launch-priority routing, help article work items, customer-support release notes, and release-note validation confidence checkpoints"
+      }
+    ],
+    "required_env_names": [
+      "LAUNCH_STEP2_SLACK_BOT_TOKEN",
+      "LAUNCH_STEP3_SLACK_SIGNING_SECRET",
+      "LAUNCH_STEP3_SLACK_BOT_TOKEN",
+      "LAUNCH_STEP3_GOOGLE_SERVICE_ACCOUNT_JSON",
+      "LAUNCH_STEP3_INTERCOM_ACCESS_TOKEN",
+      "LAUNCH_STEP3_INTERCOM_STAGING_COLLECTION_ID"
+    ],
+    "optional_env_names": [
+      "LAUNCH_STEP3_INTERCOM_AUTHOR_ID",
+      "LAUNCH_STEP3_INTERCOM_APP_ID",
+      "LAUNCH_INTERCOM_HELP_CENTER_ID",
+      "LAUNCH_INTERCOM_FORMAT_SAMPLE_IDS",
+      "LAUNCH_INTERCOM_SHAPE_FAMILIES",
+      "LAUNCH_INTERCOM_INVENTORY_STATE",
+      "LAUNCHBOT_FEATURE_INTAKE_MONITOR_CHANNEL_IDS",
+      "LAUNCHBOT_FEATURE_INTAKE_MONITOR_STATE_PATH",
+      "LAUNCHBOT_FEATURE_INTAKE_MONITOR_MAX_MESSAGES_PER_RUN",
+      "LAUNCHBOT_FEATURE_INTAKE_MONITOR_OVERLAP_SECONDS",
+      "LAUNCHBOT_FEATURE_INTAKE_APPROVER_USER_IDS",
+      "LAUNCHBOT_SUPPORT_WATCH_SOURCE",
+      "LAUNCHBOT_SUPPORT_WATCH_INTERCOM_PROJECT",
+      "LAUNCHBOT_SUPPORT_WATCH_INTERCOM_DATASET",
+      "LAUNCHBOT_SUPPORT_WATCH_ANALYTICS_DATASET",
+      "LAUNCHBOT_SUPPORT_WATCH_INCLUDE_WHATSAPP",
+      "LAUNCHBOT_SUPPORT_WATCH_WHATSAPP_VIEW",
+      "LAUNCHBOT_SUPPORT_WATCH_OUTPUT_CHANNEL_NAME",
+      "LAUNCHBOT_SUPPORT_WATCH_OUTPUT_CHANNEL_ID",
+      "LAUNCHBOT_SUPPORT_WATCH_DEDUPE_CHANNEL_IDS",
+      "LAUNCHBOT_SUPPORT_WATCH_EDT_JQL",
+      "LAUNCHBOT_SUPPORT_WATCH_STATE_PATH",
+      "LAUNCHBOT_SUPPORT_WATCH_LOOKBACK_DAYS",
+      "LAUNCHBOT_SUPPORT_WATCH_MAX_TICKETS",
+      "LAUNCH_PANTHEON_REPO",
+      "LAUNCH_PANTHEON_APPS",
+      "LAUNCH_GOOGLE_AUTH_JSON",
+      "GOOGLE_WORKSPACE_CLI_CREDENTIALS_FILE",
+      "LAUNCH_STEP2_SLACK_CHANNEL_ID",
+      "LAUNCH_STEP3_SLACK_APPROVAL_REACTION",
+      "LAUNCH_STEP3_SLACK_AUTHORIZED_REVIEWER_IDS"
+    ],
+    "help_article_contract": {
+      "source_of_truth": "pantheon_code_grounded_behavior",
+      "pantheon_evidence_required": true,
+      "pantheon_evidence_gate": true,
+      "pantheon_missing_or_dirty_blocks": true,
+      "pantheon_ambiguous_or_conflicting_blocks": true,
+      "code_source_checkout": {
+        "repo": "pantheon",
+        "remote": "git@github.com:staffany-eng/pantheon.git",
+        "branch": "develop",
+        "path": "~/.hermes/profiles/launchbot/source/pantheon",
+        "freshness_status": "~/.hermes/profiles/launchbot/runtime/pantheon-repo-status.json",
+        "daily_update_requires": "GitHub SSH access on the VM"
+      },
+      "publishable_body_excludes_internal_appendix": true,
+      "raw_html_in_markdown_body": false,
+      "text_dividers_in_markdown_body": false,
+      "repeated_title_in_body": false,
+      "audience_block_centered": true,
+      "outline_list": "numbered",
+      "numbered_steps_restart_per_subsection": true,
+      "default_article_locales": [
+        "en",
+        "id"
+      ],
+      "english_source_before_indonesian": true,
+      "per_locale_evidence_gate": true,
+      "per_locale_format_gate": true,
+      "per_locale_google_docs_review": true,
+      "per_locale_slack_approval": true,
+      "per_locale_intercom_draft": true,
+      "indonesian_needs_refresh_when_english_changes": true,
+      "intercom_format_profile": "skills/help-article-generator/references/intercom-format-profile.json",
+      "article_planning_profile": "skills/help-article-generator/references/article-planning-profile.json",
+      "intercom_article_inventory": "skills/help-article-generator/references/intercom-article-inventory.json",
+      "article_planner_required_before_draft": true,
+      "adaptive_intake_gate_before_plan": true,
+      "article_inventory_metadata_only": true,
+      "article_inventory_used_before_live_search": true,
+      "article_shape_stale_check_before_staging": true,
+      "cached_intercom_planning_profile": true,
+      "pre_publish_format_gate": true,
+      "live_intercom_wins_on_conflict": true,
+      "screenshot_capture_optional": true,
+      "screenshot_capture_failure_blocks_article_workflow": false,
+      "screenshot_capture_failure_keeps_placeholders": true,
+      "screenshot_capture_requires_demo_data": true,
+      "screenshot_troubleshooting_uses_playwright": true,
+      "screenshot_staging_credentials_secret_backed": true,
+      "screenshot_storage_state_repo_persistence": false,
+      "clubany_product_label": "StaffAny",
+      "clubany_management_article_default": "combined_brands_and_perks_article",
+      "video_only_update_lane": {
+        "mode": "Update -> Video-only update",
+        "locale": "en",
+        "registry": "skills/help-article-generator/references/video-placement-registry.json",
+        "slot_match_required": true,
+        "supported_provider": "loom",
+        "replace_policy": "replace_next_video_after_anchor",
+        "preview_tool": "preview_help_article_video_update",
+        "draft_tool": "create_help_article_video_update_draft",
+        "draft_state_only": true,
+        "article_text_rewrite": false,
+        "publish": false
+      }
+    },
+    "known_gaps": [
+      "External Step 1-3 source checkout is not present in this repo.",
+      "ClubAny content planner still needs to prefer one combined management article by default.",
+      "DOCX renderer still needs real Word numbering definitions.",
+      "Screenshot capture is runner-backed but still depends on approved DEV/staging or local Gryphon access with demo data.",
+      "Visual DOCX render QA depends on a working document renderer.",
+      "Step 4 launch derivatives are scoped to help article work items and Customer Support release notes with validator checkpoints only; changelog and WhatsApp Community are out of scope."
+    ]
+  },
+  "required_env_names": [
+    "SLACK_BOT_TOKEN",
+    "HUBSPOT_ACCESS_TOKEN",
+    "JIRA_BASE_URL",
+    "JIRA_EMAIL",
+    "JIRA_API_TOKEN",
+    "JIRA_IFI_HUBSPOT_COMPANY_ID_FIELD_ID",
+    "LAUNCH_STEP3_INTERCOM_ACCESS_TOKEN",
+    "LAUNCHBOT_KER_ALLOWED_CHANNEL_IDS"
+  ],
+  "secrets_copied": false,
+  "status": "cloud_primary_review_ready"
+}

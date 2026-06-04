@@ -1,0 +1,4 @@
+interface:
+  display_name: "CS Release Notes"
+  short_description: "Draft concise support release notes"
+  default_prompt: "Use $customer-support-release-notes-generator to draft concise CS release notes for this shipped KER ticket."

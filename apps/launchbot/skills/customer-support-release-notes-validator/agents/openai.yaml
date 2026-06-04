@@ -1,0 +1,4 @@
+interface:
+  display_name: "CS Notes Validator"
+  short_description: "Score CS release notes with evidence"
+  default_prompt: "Use $customer-support-release-notes-validator to validate these CS release notes, score confidence, and list evidence-backed fixes."

@@ -7,5 +7,9 @@ node_modules/
 
 *.log
 .cache/
+*storage-state*.json
+*storageState*.json
+*storage_state*.json
 dist/
 coverage/
+apps/launchbot/output/

@@ -1,0 +1,367 @@
+terminal:
+  cwd: /home/leekaiyi/.hermes/profiles/launchbot/source/launchbot
+security:
+  redact_secrets: true
+display:
+  busy_input_mode: queue
+  interim_assistant_messages: false
+  streaming: false
+  tool_progress: "off"
+  platforms:
+    slack:
+      streaming: false
+      tool_progress: "off"
+platforms:
+  slack:
+    gateway_restart_notification: false
+slack:
+  require_mention: true
+  allowed_channels: ""
+  reactions: false
+cron:
+  max_parallel_jobs: 1
+sources:
+  pantheon:
+    description: "StaffAny product behavior source of truth for help article drafting."
+    repo_url: "git@github.com:staffany-eng/pantheon.git"
+    branch: "develop"
+    checkout_env: "LAUNCHBOT_PANTHEON_REPO_DIR"
+    default_checkout: "~/.hermes/profiles/launchbot/source/pantheon"
+    deploy_key_env: "LAUNCHBOT_PANTHEON_SSH_KEY"
+    default_deploy_key: "~/.hermes/profiles/launchbot/ssh/pantheon_deploy_key"
+    status_json: "~/.hermes/profiles/launchbot/runtime/pantheon-repo-status.json"
+feature_intake_monitor:
+  mode: "no_agent_slack_poll"
+  script: "/home/leekaiyi/.hermes/profiles/launchbot/scripts/launchbot-monitor-feature-intake.py"
+  configured_channel_ids_env: "LAUNCHBOT_FEATURE_INTAKE_MONITOR_CHANNEL_IDS"
+  state_path_env: "LAUNCHBOT_FEATURE_INTAKE_MONITOR_STATE_PATH"
+  max_messages_per_run_env: "LAUNCHBOT_FEATURE_INTAKE_MONITOR_MAX_MESSAGES_PER_RUN"
+  overlap_seconds_env: "LAUNCHBOT_FEATURE_INTAKE_MONITOR_OVERLAP_SECONDS"
+  required_confirmation: "create intake"
+  no_raw_transcript_persistence: true
+  normal_gateway_require_mention: true
+support_watch_monitor:
+  mode: "no_agent_weekly_report"
+  script: "/home/leekaiyi/.hermes/profiles/launchbot/scripts/launchbot-monitor-support-watch.py"
+  source_env: "LAUNCHBOT_SUPPORT_WATCH_SOURCE"
+  source: "bigquery"
+  intercom_project_env: "LAUNCHBOT_SUPPORT_WATCH_INTERCOM_PROJECT"
+  intercom_project: "staffany-warehouse"
+  intercom_dataset_env: "LAUNCHBOT_SUPPORT_WATCH_INTERCOM_DATASET"
+  intercom_dataset: "intercom"
+  analytics_dataset_env: "LAUNCHBOT_SUPPORT_WATCH_ANALYTICS_DATASET"
+  analytics_dataset: "analytics"
+  bq_timeout_seconds_env: "LAUNCHBOT_SUPPORT_WATCH_BQ_TIMEOUT_SECONDS"
+  bq_timeout_seconds: "240"
+  include_whatsapp_env: "LAUNCHBOT_SUPPORT_WATCH_INCLUDE_WHATSAPP"
+  include_whatsapp: true
+  whatsapp_view_env: "LAUNCHBOT_SUPPORT_WATCH_WHATSAPP_VIEW"
+  whatsapp_view: "analytics.support_watch_whatsapp_ticket_logs"
+  whatsapp_source_view_env: "LAUNCHBOT_SUPPORT_WATCH_WHATSAPP_SOURCE_VIEW"
+  whatsapp_source_view: "gsheets.cs_tickets_logs_all_view"
+  whatsapp_refresh_transfer_name_env: "LAUNCHBOT_SUPPORT_WATCH_WHATSAPP_REFRESH_TRANSFER_NAME"
+  whatsapp_refresh_transfer_name: "Launchbot support watch WhatsApp native mirror refresh"
+  whatsapp_refresh_schedule_utc_env: "LAUNCHBOT_SUPPORT_WATCH_WHATSAPP_REFRESH_SCHEDULE_UTC"
+  whatsapp_refresh_schedule_utc: "every day 00:30"
+  whatsapp_max_staleness_hours_env: "LAUNCHBOT_SUPPORT_WATCH_WHATSAPP_MAX_STALENESS_HOURS"
+  whatsapp_max_staleness_hours: "36"
+  output_channel_name_env: "LAUNCHBOT_SUPPORT_WATCH_OUTPUT_CHANNEL_NAME"
+  output_channel_id_env: "LAUNCHBOT_SUPPORT_WATCH_OUTPUT_CHANNEL_ID"
+  dedupe_channel_ids_env: "LAUNCHBOT_SUPPORT_WATCH_DEDUPE_CHANNEL_IDS"
+  dedupe_channel_names_env: "LAUNCHBOT_SUPPORT_WATCH_DEDUPE_CHANNEL_NAMES"
+  edt_jql_env: "LAUNCHBOT_SUPPORT_WATCH_EDT_JQL"
+  state_path_env: "LAUNCHBOT_SUPPORT_WATCH_STATE_PATH"
+  lookback_days_env: "LAUNCHBOT_SUPPORT_WATCH_LOOKBACK_DAYS"
+  max_tickets_env: "LAUNCHBOT_SUPPORT_WATCH_MAX_TICKETS"
+  schedule_utc: "0 1 * * 4"
+  local_time: "Thursday 09:00 SGT"
+  no_raw_transcript_persistence: true
+  output_channel_name: "all-bugs-production"
+  dedupe_channel_names: "team-cs-eng-duty"
+  report_prefix: "Launchbot automation:"
+  no_ticket_creation: true
+  no_engineer_tags: true
+  no_owner_assignment: true
+help_article_jira_shipped_windmill:
+  mode: "jira_transition_to_windmill_webhook"
+  flow_name: "launchbot_ker_help_article_on_shipped"
+  script: "/home/leekaiyi/.hermes/profiles/launchbot/source/launchbot/runtime/windmill/launchbot_ker_help_article_on_shipped.mjs"
+  state_table: "launchbot_help_article_runs"
+  state_schema: "/home/leekaiyi/.hermes/profiles/launchbot/source/launchbot/runtime/windmill/launchbot_help_article_runs.sql"
+  transition_to: "6 - Shipped & Launching"
+  webhook_token_env: "WINDMILL_WEBHOOK_TOKEN"
+  idempotency_key: "issue_key + ':' + transitioned_at"
+  jira_launch_priority_field_env: "JIRA_FIELD_LAUNCH_PRIORITY"
+  jira_launch_priority_field: "customfield_10561"
+  jira_product_lead_field_env: "JIRA_FIELD_PRODUCT_LEAD"
+  review_channel_id_env: "LAUNCHBOT_REVIEW_CHANNEL_ID"
+  review_channel_id: "C0B32M34J3W"
+  product_lead_slack_mapping_env: "LAUNCHBOT_JIRA_ACCOUNT_TO_SLACK_USER_MAP"
+  intercom_access_token_env: "INTERCOM_ACCESS_TOKEN"
+  intercom_access_token_fallback_env: "LAUNCH_STEP3_INTERCOM_ACCESS_TOKEN"
+  intercom_author_id_env: "INTERCOM_AUTHOR_ID"
+  intercom_default_parent_id_env: "INTERCOM_HELP_ARTICLE_DEFAULT_PARENT_ID"
+  intercom_update_draft_supported_env: "LAUNCHBOT_INTERCOM_UPDATE_DRAFT_SUPPORTED"
+  auto_publish_confirmation: "@Launch Bot publish help articles KER-123"
+  locales: "en,id"
+  launch_priority_required: true
+  product_lead_mapping_required: true
+  pantheon_evidence_required: true
+  cached_intercom_planning_first: true
+  live_intercom_stale_check_before_write: true
+  english_source_before_indonesian: true
+  indonesian_needs_refresh_when_english_changes: true
+  product_lead_or_override_publish_only: true
+  post_prefix: "Launchbot automation:"
+kanban:
+  dispatch_in_gateway: false
+model:
+  default: "claude-sonnet-4-6"
+  provider: "anthropic"
+mcp_servers:
+  launchbot_ker:
+    description: "Read-only Slack thread to Jira KER lookup adapter for Launchbot."
+    command: "/home/leekaiyi/.hermes/hermes-agent/venv/bin/python"
+    args:
+      - "/home/leekaiyi/.hermes/profiles/launchbot/source/launchbot/runtime/mcp/launchbot_ker_server.py"
+    timeout: 120
+    tool_allowlist:
+      - "find_ker_ticket_from_slack_thread"
+      - "lookup_ker_ticket_by_key"
+    auth_metadata:
+      slack:
+        type: "bot_token_env"
+        env: "SLACK_BOT_TOKEN"
+      jira:
+        type: "basic_auth_env"
+        base_url_env: "JIRA_BASE_URL"
+        email_env: "JIRA_EMAIL"
+        api_token_env: "JIRA_API_TOKEN"
+    access_policy:
+      mode: "read_only"
+      configured_channel_ids_env: "LAUNCHBOT_KER_ALLOWED_CHANNEL_IDS"
+      default_channel_ids:
+        - "C0B32M34J3W"
+        - "C0AJAUNCEL8"
+        - "C01RZ7SHC8K"
+      no_slack_connector_fallback: true
+      no_user_token_fallback: true
+  launchbot_product_commitment:
+    description: "Read-only Slack thread to Jira KER/JPD product commitment checker for Launchbot."
+    command: "/home/leekaiyi/.hermes/hermes-agent/venv/bin/python"
+    args:
+      - "/home/leekaiyi/.hermes/profiles/launchbot/source/launchbot/runtime/mcp/launchbot_product_commitment_server.py"
+    timeout: 120
+    tool_allowlist:
+      - "check_product_commitment_from_slack_thread"
+    auth_metadata:
+      slack:
+        type: "bot_token_env"
+        env: "SLACK_BOT_TOKEN"
+      jira:
+        type: "basic_auth_env"
+        base_url_env: "JIRA_BASE_URL"
+        email_env: "JIRA_EMAIL"
+        api_token_env: "JIRA_API_TOKEN"
+    access_policy:
+      mode: "read_only_commitment_check"
+      configured_channel_ids_env: "LAUNCHBOT_PRODUCT_COMMITMENT_ALLOWED_CHANNEL_IDS"
+      default_channel_ids:
+        - "C0B32M34J3W"
+        - "C01RZ7SHC8K"
+      project_key: "KER"
+      reviewed_commitment_fields_env: "LAUNCHBOT_PRODUCT_COMMITMENT_FIELD_IDS"
+      standard_commitment_fields:
+        - "fixVersions"
+      no_slack_post_from_mcp: true
+      no_jira_mutation: true
+      no_jira_comments: true
+      no_jira_transitions: true
+      no_jira_assignment: true
+      no_timeline_inference: true
+      no_intake_creation: true
+      no_slack_connector_fallback: true
+      no_user_token_fallback: true
+  launchbot_ifi:
+    description: "Preview-first HubSpot company to IFI feature request tracking adapter."
+    command: "/home/leekaiyi/.hermes/hermes-agent/venv/bin/python"
+    args:
+      - "/home/leekaiyi/.hermes/profiles/launchbot/source/launchbot/runtime/mcp/launchbot_ifi_server.py"
+    timeout: 120
+    tool_allowlist:
+      - "preview_ifi_feature_request_tracking"
+      - "create_or_update_ifi_feature_request_tracking"
+      - "preview_ifi_feature_request_from_bd_note"
+      - "create_or_update_ifi_feature_request_from_bd_note"
+    auth_metadata:
+      hubspot:
+        type: "bearer_token_env"
+        env: "HUBSPOT_ACCESS_TOKEN"
+        fallback_env: "HUBSPOT_PRIVATE_APP_TOKEN"
+      jira:
+        type: "basic_auth_env"
+        base_url_env: "JIRA_BASE_URL"
+        email_env: "JIRA_EMAIL"
+        api_token_env: "JIRA_API_TOKEN"
+    access_policy:
+      mode: "preview_first_confirmed_jira_mutation"
+      project_key: "IFI"
+      feature_request_issue_type_id: "10151"
+      hubspot_company_id_field_id_env: "JIRA_IFI_HUBSPOT_COMPANY_ID_FIELD_ID"
+      default_hubspot_company_id_field_id: "customfield_10881"
+      approval_marker: "confirm IFI"
+      will_post_message: false
+      bd_notes_mode: "second_intake_surface_same_ifi_contract"
+      bd_notes_require_confirmed_hubspot_company_id: true
+      ambiguous_company_action: "ask_for_hubspot_company_link_or_numeric_id"
+      no_slack_connector_fallback: true
+      no_user_token_fallback: true
+  launchbot_feature_intake:
+    description: "Guarded Slack thread to Jira Product Discovery KER intake adapter for Launchbot."
+    command: "/home/leekaiyi/.hermes/hermes-agent/venv/bin/python"
+    args:
+      - "/home/leekaiyi/.hermes/profiles/launchbot/source/launchbot/runtime/mcp/launchbot_feature_intake_server.py"
+    timeout: 120
+    tool_allowlist:
+      - "preview_feature_intake_from_slack_thread"
+      - "create_feature_intake_from_slack_thread"
+    auth_metadata:
+      slack:
+        type: "bot_token_env"
+        env: "SLACK_BOT_TOKEN"
+      jira:
+        type: "basic_auth_env"
+        base_url_env: "JIRA_BASE_URL"
+        email_env: "JIRA_EMAIL"
+        api_token_env: "JIRA_API_TOKEN"
+    access_policy:
+      mode: "confirmed_jpd_intake_create"
+      configured_channel_ids_env: "LAUNCHBOT_FEATURE_INTAKE_ALLOWED_CHANNEL_IDS"
+      default_channel_ids:
+        - "C0B32M34J3W"
+        - "CF8PK6V4J"
+      project_key: "KER"
+      issue_type_id: "10043"
+      slack_prd_field_id: "customfield_10080"
+      required_confirmation: "create intake"
+      preview_first: true
+      no_slack_post_from_mcp: true
+      no_jira_comments: true
+      no_jira_transitions: true
+      no_jira_assignment: true
+      no_slack_connector_fallback: true
+      no_user_token_fallback: true
+  launchbot_support_watch:
+    description: "Read-only BigQuery Intercom-conversation weekly watch preview for Launchbot."
+    command: "/home/leekaiyi/.hermes/hermes-agent/venv/bin/python"
+    args:
+      - "/home/leekaiyi/.hermes/profiles/launchbot/source/launchbot/runtime/mcp/launchbot_support_watch_server.py"
+    timeout: 180
+    tool_allowlist:
+      - "preview_weekly_support_watch_report"
+    auth_metadata:
+      bigquery:
+        type: "service_account_or_adc"
+        project_env: "LAUNCHBOT_SUPPORT_WATCH_INTERCOM_PROJECT"
+        default_project: "staffany-warehouse"
+      slack:
+        type: "bot_token_env"
+        env: "SLACK_BOT_TOKEN"
+      jira:
+        type: "basic_auth_env"
+        base_url_env: "JIRA_BASE_URL"
+        email_env: "JIRA_EMAIL"
+        api_token_env: "JIRA_API_TOKEN"
+    access_policy:
+      mode: "read_only_weekly_support_watch"
+      source: "bigquery"
+      source_env: "LAUNCHBOT_SUPPORT_WATCH_SOURCE"
+      intercom_project_env: "LAUNCHBOT_SUPPORT_WATCH_INTERCOM_PROJECT"
+      intercom_dataset_env: "LAUNCHBOT_SUPPORT_WATCH_INTERCOM_DATASET"
+      analytics_dataset_env: "LAUNCHBOT_SUPPORT_WATCH_ANALYTICS_DATASET"
+      include_whatsapp_env: "LAUNCHBOT_SUPPORT_WATCH_INCLUDE_WHATSAPP"
+      whatsapp_view_env: "LAUNCHBOT_SUPPORT_WATCH_WHATSAPP_VIEW"
+      output_channel_name: "all-bugs-production"
+      output_channel_name_env: "LAUNCHBOT_SUPPORT_WATCH_OUTPUT_CHANNEL_NAME"
+      output_channel_id_env: "LAUNCHBOT_SUPPORT_WATCH_OUTPUT_CHANNEL_ID"
+      dedupe_channel_ids_env: "LAUNCHBOT_SUPPORT_WATCH_DEDUPE_CHANNEL_IDS"
+      dedupe_channel_names_env: "LAUNCHBOT_SUPPORT_WATCH_DEDUPE_CHANNEL_NAMES"
+      edt_jql_env: "LAUNCHBOT_SUPPORT_WATCH_EDT_JQL"
+      default_edt_jql: "project = PCO AND \"PS Team\" = \"Eng Duty\" AND statusCategory != Done ORDER BY updated DESC"
+      no_slack_post_from_mcp: true
+      no_ticket_creation: true
+      no_engineer_tags: true
+      no_owner_assignment: true
+      no_raw_support_transcript_persistence: true
+      no_slack_connector_fallback: true
+      no_user_token_fallback: true
+  launchbot_help_article:
+    description: "Draft-only registered video-slot updater for StaffAny help articles."
+    command: "/home/leekaiyi/.hermes/hermes-agent/venv/bin/python"
+    args:
+      - "/home/leekaiyi/.hermes/profiles/launchbot/source/launchbot/runtime/mcp/launchbot_help_article_server.py"
+    timeout: 120
+    tool_allowlist:
+      - "preview_help_article_video_update"
+      - "create_help_article_video_update_draft"
+    auth_metadata:
+      intercom:
+        type: "bearer_token_env"
+        env: "LAUNCH_STEP3_INTERCOM_ACCESS_TOKEN"
+    access_policy:
+      mode: "draft_only_registered_video_slots"
+      registry_path: "/home/leekaiyi/.hermes/profiles/launchbot/source/launchbot/skills/help-article-generator/references/video-placement-registry.json"
+      supported_provider: "loom"
+      required_confirmation: "draft it"
+      allow_article_text_rewrite: false
+      allow_publish: false
+      allow_delete: false
+      allow_tag_mutation: false
+      allow_collection_mutation: false
+gateway:
+  slack:
+    enabled: true
+    app_token_env: "SLACK_APP_TOKEN"
+    bot_token_env: "SLACK_BOT_TOKEN"
+    allowed_users_env: "SLACK_ALLOWED_USERS"
+    channel: "#launch-bot-testing"
+SLACK_HOME_CHANNEL: "C0B32M34J3W"
+SLACK_HOME_CHANNEL_NAME: "launch-bot-testing"
+LAUNCHBOT_KER_ALLOWED_CHANNEL_IDS: "C0B32M34J3W,C0AJAUNCEL8,C01RZ7SHC8K"
+LAUNCHBOT_PRODUCT_COMMITMENT_ALLOWED_CHANNEL_IDS: "C0B32M34J3W,C01RZ7SHC8K"
+LAUNCHBOT_PRODUCT_COMMITMENT_FIELD_IDS: ""
+LAUNCHBOT_FEATURE_INTAKE_ALLOWED_CHANNEL_IDS: "C0B32M34J3W,CF8PK6V4J"
+LAUNCHBOT_FEATURE_INTAKE_MONITOR_CHANNEL_IDS: "CF8PK6V4J"
+LAUNCHBOT_FEATURE_INTAKE_MONITOR_STATE_PATH: "~/.hermes/profiles/launchbot/runtime/feature-intake-monitor-state.json"
+LAUNCHBOT_FEATURE_INTAKE_MONITOR_MAX_MESSAGES_PER_RUN: "100"
+LAUNCHBOT_FEATURE_INTAKE_MONITOR_OVERLAP_SECONDS: "600"
+LAUNCHBOT_SUPPORT_WATCH_OUTPUT_CHANNEL_NAME: "all-bugs-production"
+LAUNCHBOT_SUPPORT_WATCH_OUTPUT_CHANNEL_ID: ""
+LAUNCHBOT_SUPPORT_WATCH_DEDUPE_CHANNEL_IDS: ""
+LAUNCHBOT_SUPPORT_WATCH_DEDUPE_CHANNEL_NAMES: "team-cs-eng-duty"
+LAUNCHBOT_SUPPORT_WATCH_EDT_JQL: "project = PCO AND \"PS Team\" = \"Eng Duty\" AND statusCategory != Done ORDER BY updated DESC"
+LAUNCHBOT_SUPPORT_WATCH_STATE_PATH: "~/.hermes/profiles/launchbot/runtime/support-watch-state.json"
+LAUNCHBOT_SUPPORT_WATCH_LOOKBACK_DAYS: "7"
+LAUNCHBOT_SUPPORT_WATCH_SOURCE: "bigquery"
+LAUNCHBOT_SUPPORT_WATCH_INTERCOM_PROJECT: "staffany-warehouse"
+LAUNCHBOT_SUPPORT_WATCH_INTERCOM_DATASET: "intercom"
+LAUNCHBOT_SUPPORT_WATCH_ANALYTICS_DATASET: "analytics"
+LAUNCHBOT_SUPPORT_WATCH_BQ_TIMEOUT_SECONDS: "240"
+LAUNCHBOT_SUPPORT_WATCH_INCLUDE_WHATSAPP: "true"
+LAUNCHBOT_SUPPORT_WATCH_WHATSAPP_VIEW: "analytics.support_watch_whatsapp_ticket_logs"
+LAUNCHBOT_SUPPORT_WATCH_WHATSAPP_SOURCE_VIEW: "gsheets.cs_tickets_logs_all_view"
+LAUNCHBOT_SUPPORT_WATCH_WHATSAPP_REFRESH_TRANSFER_NAME: "Launchbot support watch WhatsApp native mirror refresh"
+LAUNCHBOT_SUPPORT_WATCH_WHATSAPP_REFRESH_SCHEDULE_UTC: "every day 00:30"
+LAUNCHBOT_SUPPORT_WATCH_WHATSAPP_MAX_STALENESS_HOURS: "36"
+LAUNCHBOT_SUPPORT_WATCH_MAX_TICKETS: "100"
+LAUNCHBOT_REVIEW_CHANNEL_ID: "C0B32M34J3W"
+JIRA_FIELD_LAUNCH_PRIORITY: "customfield_10561"
+JIRA_FIELD_PRODUCT_LEAD: ""
+LAUNCHBOT_JIRA_ACCOUNT_TO_SLACK_USER_MAP: "{}"
+LAUNCHBOT_HELP_ARTICLE_STATE_PATH: "~/.hermes/profiles/launchbot/runtime/launchbot-help-article-runs.json"
+LAUNCHBOT_INTERCOM_UPDATE_DRAFT_SUPPORTED: "false"
+INTERCOM_AUTHOR_ID: ""
+INTERCOM_HELP_ARTICLE_DEFAULT_PARENT_ID: ""
+WINDMILL_WEBHOOK_TOKEN: ""
+JIRA_IFI_HUBSPOT_COMPANY_ID_FIELD_ID: "customfield_10881"
+HUBSPOT_PORTAL_ID: "4137076"

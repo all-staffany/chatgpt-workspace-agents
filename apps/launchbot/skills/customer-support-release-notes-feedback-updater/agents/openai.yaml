@@ -1,0 +1,4 @@
+interface:
+  display_name: "CS Notes Updater"
+  short_description: "Revise CS notes from validation"
+  default_prompt: "Use $customer-support-release-notes-feedback-updater to revise these CS release notes from validator feedback and evidence."

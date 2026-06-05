@@ -17,9 +17,12 @@ Read these first for app work:
 - `skills/help-article-screenshot-capture/SKILL.md`
 - `skills/help-article-screenshot-troubleshooter/SKILL.md`
 - `skills/product-marketing-launch-workflow/SKILL.md`
-- `skills/changelog-draft-generator/SKILL.md`
-- `skills/whatsapp-community-message-generator/SKILL.md`
-- `skills/launch-material-evaluator/SKILL.md`
+- `skills/launch-priority-identifier/SKILL.md`
+- `skills/customer-support-release-notes-generator/SKILL.md`
+- `skills/customer-support-release-notes-validator/SKILL.md`
+- `skills/customer-support-release-notes-feedback-updater/SKILL.md`
+- `skills/help-article-validator/SKILL.md`
+- `skills/help-article-feedback-updater/SKILL.md`
 - `../../research/wiki/sources/hermes-agent-docs.md`
 - `../../research/wiki/syntheses/hermes-runtime-bot-operating-model.md`
 

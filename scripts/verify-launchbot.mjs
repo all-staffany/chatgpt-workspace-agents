@@ -469,6 +469,7 @@ for (const relPath of [
   "runtime/health-checks.md",
   "runtime/check-health.sh",
   "runtime/audit-live-profile.sh",
+  "runtime/sync-live-profile.sh",
   "runtime/update-pantheon-repo.sh",
   "runtime/monitor-feature-intake.py",
   "runtime/test_monitor_feature_intake.py",
@@ -821,6 +822,46 @@ for (const requiredText of [
   "Re-run help-article-validator before marking ready.",
 ]) {
   if (!helpArticleUpdaterSkillText.includes(requiredText)) fail(`help-article-feedback-updater/SKILL.md missing required text: ${requiredText}`);
+}
+
+const liveProfileSyncText = textOf("runtime/sync-live-profile.sh");
+for (const requiredText of [
+  "PROFILE_DIR/source/launchbot",
+  "PROFILE_DIR/skills",
+  "product-marketing-launch-workflow",
+  "launch-priority-identifier",
+  "customer-support-release-notes-generator",
+  "customer-support-release-notes-validator",
+  "customer-support-release-notes-feedback-updater",
+  "staffany-indonesia-payroll-tax-grimoire",
+]) {
+  if (!liveProfileSyncText.includes(requiredText)) fail(`sync-live-profile.sh missing required text: ${requiredText}`);
+}
+
+const liveProfileAuditText = textOf("runtime/audit-live-profile.sh");
+for (const requiredText of [
+  "profile-skill-missing",
+  "source-skill-missing",
+  "product-marketing-launch-workflow",
+  "launch-priority-identifier",
+  "customer-support-release-notes-generator",
+  "customer-support-release-notes-validator",
+  "customer-support-release-notes-feedback-updater",
+]) {
+  if (!liveProfileAuditText.includes(requiredText)) fail(`audit-live-profile.sh missing required text: ${requiredText}`);
+}
+
+const liveHealthText = textOf("runtime/check-health.sh");
+for (const requiredText of [
+  "profile-skill:",
+  "source-skill:",
+  "product-marketing-launch-workflow",
+  "launch-priority-identifier",
+  "customer-support-release-notes-generator",
+  "customer-support-release-notes-validator",
+  "customer-support-release-notes-feedback-updater",
+]) {
+  if (!liveHealthText.includes(requiredText)) fail(`check-health.sh missing required text: ${requiredText}`);
 }
 
 const csReleaseNotesValidatorSkillText = textOf("skills/customer-support-release-notes-validator/SKILL.md");

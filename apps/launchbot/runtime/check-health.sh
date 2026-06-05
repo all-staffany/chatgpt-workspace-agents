@@ -36,6 +36,8 @@ PANTHEON_STATUS_MAX_AGE_SECONDS="${LAUNCHBOT_PANTHEON_STATUS_MAX_AGE_SECONDS:-17
 HELP_ARTICLE_VIDEO_REGISTRY_PATH="${LAUNCHBOT_VIDEO_PLACEMENT_REGISTRY:-$PROFILE_DIR/source/launchbot/skills/help-article-generator/references/video-placement-registry.json}"
 FEATURE_INTAKE_MONITOR_SCRIPT="${LAUNCHBOT_FEATURE_INTAKE_MONITOR_SCRIPT:-$PROFILE_DIR/scripts/launchbot-monitor-feature-intake.py}"
 SUPPORT_WATCH_MONITOR_SCRIPT="${LAUNCHBOT_SUPPORT_WATCH_MONITOR_SCRIPT:-$PROFILE_DIR/scripts/launchbot-monitor-support-watch.py}"
+SOURCE_SKILLS_DIR="$PROFILE_DIR/source/launchbot/skills"
+PROFILE_SKILLS_DIR="$PROFILE_DIR/skills"
 
 fail() {
   printf '%s\n' "$1" >&2
@@ -76,6 +78,28 @@ need_command() {
 need_command hermes
 need_command git
 need_command bq
+
+required_skills=(
+  help-article-generator
+  help-article-validator
+  help-article-feedback-updater
+  help-article-screenshot-capture
+  help-article-screenshot-troubleshooter
+  product-marketing-launch-workflow
+  launch-priority-identifier
+  customer-support-release-notes-generator
+  customer-support-release-notes-validator
+  customer-support-release-notes-feedback-updater
+  weekly-support-watch
+  staffany-indonesia-payroll-tax-grimoire
+  product-ops-bot-full-workflow
+)
+
+for skill in "${required_skills[@]}"; do
+  [ -r "$SOURCE_SKILLS_DIR/$skill/SKILL.md" ] || fail "source-skill:$skill:missing"
+  [ -r "$PROFILE_SKILLS_DIR/$skill/SKILL.md" ] || fail "profile-skill:$skill:missing"
+done
+
 config_path="$(hermes -p "$PROFILE" config path 2>/dev/null)" || fail "hermes:config-path-failed"
 [ -r "$config_path" ] || fail "hermes:config-unreadable"
 hermes -p "$PROFILE" config check >/dev/null 2>&1 || fail "hermes:config-check-failed"

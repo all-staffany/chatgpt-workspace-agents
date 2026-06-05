@@ -68,18 +68,14 @@ Canonical Hermes app packet for the Launchbot Slack profile.
 
 1. Install Hermes and verify `hermes doctor`.
 2. Create or select the `launchbot` profile on `hermes-data-bot-poc` only. If a Mac-local `~/.hermes/profiles/launchbot` exists, archive/delete it before live Slack testing.
-3. Copy `profile/SOUL.md` to `~/.hermes/profiles/launchbot/SOUL.md`.
+3. Run `apps/launchbot/runtime/sync-live-profile.sh` from this repo checkout on `hermes-data-bot-poc`. It copies `profile/SOUL.md`, the source packet, runtime scripts, and all LaunchBot skills into both `~/.hermes/profiles/launchbot/source/launchbot/` and `~/.hermes/profiles/launchbot/skills/`.
 4. Use `profile/config.template.yaml` as the non-secret config guide.
 5. Set Slack and model secrets from the approved secret store only.
 6. Set Jira env vars (`JIRA_BASE_URL`, `JIRA_EMAIL`, `JIRA_API_TOKEN`) in the live profile `.env` before enabling KER lookup, IFI tracking, product commitment checks, or confirmed feature intake.
-7. Copy `skills/help-article-generator/`, `skills/help-article-validator/`, `skills/help-article-feedback-updater/`, `skills/help-article-screenshot-capture/`, `skills/help-article-screenshot-troubleshooter/`, `skills/product-marketing-launch-workflow/`, `skills/launch-priority-identifier/`, `skills/customer-support-release-notes-generator/`, `skills/customer-support-release-notes-validator/`, and `skills/customer-support-release-notes-feedback-updater/` into `~/.hermes/profiles/launchbot/skills/` when enabling PMM launch drafting, article drafting, Customer Support release notes, optional screenshot assets, screenshot troubleshooting, and registered video-slot updates.
-8. Copy `skills/staffany-indonesia-payroll-tax-grimoire/` into `~/.hermes/profiles/launchbot/skills/` when enabling Indonesia payroll-tax answers.
-9. Copy runtime scripts into `~/.hermes/profiles/launchbot/scripts/`, including `launchbot-monitor-feature-intake.py` and `launchbot-monitor-support-watch.py`.
-10. Copy `runtime/mcp/launchbot_ifi_server.py`, `runtime/mcp/launchbot_support_watch_server.py`, `runtime/mcp/launchbot_support_watch_core.py`, and `runtime/mcp/launchbot_help_article_server.py` into the live profile source tree before enabling the matching MCP servers.
-11. Set `HUBSPOT_ACCESS_TOKEN` and `JIRA_IFI_HUBSPOT_COMPANY_ID_FIELD_ID=customfield_10881` before enabling IFI tracking. `HUBSPOT_PORTAL_ID` defaults to `4137076`.
-12. Seed `~/.hermes/profiles/launchbot/source/pantheon` for code-grounded article verification and StaffAny Indonesia payroll-tax capability checks. Install the daily Pantheon updater cron only after the VM has GitHub SSH access to `staffany-eng/pantheon`.
-13. Start the managed gateway and install the no-agent health check cron.
-14. Install the feature-intake monitor cron only after Slack/Jira env is present and a dry-run against `CF8PK6V4J` succeeds:
+7. Set `HUBSPOT_ACCESS_TOKEN` and `JIRA_IFI_HUBSPOT_COMPANY_ID_FIELD_ID=customfield_10881` before enabling IFI tracking. `HUBSPOT_PORTAL_ID` defaults to `4137076`.
+8. Seed `~/.hermes/profiles/launchbot/source/pantheon` for code-grounded article verification and StaffAny Indonesia payroll-tax capability checks. Install the daily Pantheon updater cron only after the VM has GitHub SSH access to `staffany-eng/pantheon`.
+9. Start the managed gateway and install the no-agent health check cron.
+10. Install the feature-intake monitor cron only after Slack/Jira env is present and a dry-run against `CF8PK6V4J` succeeds:
     ```bash
     cp apps/launchbot/runtime/monitor-feature-intake.py ~/.hermes/profiles/launchbot/scripts/launchbot-monitor-feature-intake.py
     ~/.hermes/profiles/launchbot/scripts/launchbot-monitor-feature-intake.py --dry-run --channel CF8PK6V4J --since-minutes 30
@@ -88,7 +84,7 @@ Canonical Hermes app packet for the Launchbot Slack profile.
       --script launchbot-monitor-feature-intake.py \
       --no-agent
     ```
-15. Install the support-watch cron only after BigQuery/Jira/Slack env is present, `#all-bugs-production` resolves with the Launchbot bot token, Launchbot can join configured public channels with `channels:join`, and a dry-run succeeds. Public support-watch channels resolve by name with `channels:read`; use explicit channel IDs only for private channels:
+11. Install the support-watch cron only after BigQuery/Jira/Slack env is present, `#all-bugs-production` resolves with the Launchbot bot token, Launchbot can join configured public channels with `channels:join`, and a dry-run succeeds. Public support-watch channels resolve by name with `channels:read`; use explicit channel IDs only for private channels:
     ```bash
     cp apps/launchbot/runtime/monitor-support-watch.py ~/.hermes/profiles/launchbot/scripts/launchbot-monitor-support-watch.py
     LAUNCHBOT_SUPPORT_WATCH_OUTPUT_CHANNEL_NAME=all-bugs-production \
@@ -99,8 +95,8 @@ Canonical Hermes app packet for the Launchbot Slack profile.
       --script launchbot-monitor-support-watch.py \
       --no-agent
     ```
-16. Confirm no Mac-local `launchbot` profile or gateway exists before live Slack testing. Only the cloud Launchbot runtime should be connected to Slack, otherwise stale local profile state can answer first.
-17. Treat the restore as verified only after the health check passes and the Slack smoke replies from Launchbot's bot identity in `#launch-bot-testing`.
+12. Confirm no Mac-local `launchbot` profile or gateway exists before live Slack testing. Only the cloud Launchbot runtime should be connected to Slack, otherwise stale local profile state can answer first.
+13. Treat the restore as verified only after the health check passes and the Slack smoke replies from Launchbot's bot identity in `#launch-bot-testing`.
 
 ## Jira Shipped Help Article Windmill Flow
 
